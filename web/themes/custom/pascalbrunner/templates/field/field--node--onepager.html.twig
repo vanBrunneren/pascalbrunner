@@ -1,7 +1,7 @@
 {#
 /**
  * @file
- * Theme override for a field.
+ * Default theme implementation for a field.
  *
  * To override output, copy the "field.html.twig" from the templates directory
  * to your theme's directory and customize it, just like customizing other
@@ -33,49 +33,40 @@
  * - field_type: The type of the field.
  * - label_display: The display settings for the label.
  *
- * @ingroup templates
- *
  * @see template_preprocess_field()
+ *
+ * @ingroup themeable
  */
 #}
 {%
-  set classes = [
-    'field',
-    'field--name-' ~ field_name|clean_class,
-    'field--type-' ~ field_type|clean_class,
-    'field--label-' ~ label_display,
-  ]
-%}
-{%
-  set title_classes = [
-    'field--label',
-    label_display == 'visually_hidden' ? 'sr-only',
-  ]
+    set title_classes = [
+    label_display == 'visually_hidden' ? 'visually-hidden',
+]
 %}
 
 {% if label_hidden %}
-  {% if multiple %}
-    <div{{ attributes.addClass(classes, 'field--items') }}>
-      {% for item in items %}
-        <div{{ item.attributes.addClass('field--item') }}>{{ item.content }}hallo1</div>
-      {% endfor %}
-    </div>
-  {% else %}
-    {% for item in items %}
-      <div{{ attributes.addClass(classes, 'field--item') }}>{{ item.content }}hallo2</div>
-    {% endfor %}
-  {% endif %}
+    {% if multiple %}
+        <div{{ attributes }}>
+            {% for item in items %}
+                <div{{ item.attributes }}>{{ item.content }}</div>
+            {% endfor %}
+        </div>
+    {% else %}
+        {% for item in items %}
+            <div{{ attributes.addClass('content-element') }}>{{ item.content }}</div>
+        {% endfor %}
+    {% endif %}
 {% else %}
-  <div{{ attributes.addClass(classes) }}>
-    <div{{ title_attributes.addClass(title_classes) }}>{{ label }}hallo3</div>
-    {% if multiple %}
-      <div class="field--items">
-    {% endif %}
-    {% for item in items %}
-      <div{{ item.attributes.addClass('field--item') }}>{{ item.content }}hallo4</div>
-    {% endfor %}
-    {% if multiple %}
-      </div>
-    {% endif %}
-  </div>
+    <div{{ attributes }}>
+        <div{{ title_attributes.addClass(title_classes) }}>{{ label }}</div>
+        {% if multiple %}
+        <div>
+            {% endif %}
+            {% for item in items %}
+                <div{{ item.attributes }}>{{ item.content }}</div>
+            {% endfor %}
+            {% if multiple %}
+        </div>
+        {% endif %}
+    </div>
 {% endif %}
